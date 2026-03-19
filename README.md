@@ -143,9 +143,5 @@ npm run dev
 - Signup should create a matching profile row in `public.users`
 - FastAPI expects a valid Supabase access token on protected routes
 
-## Recommended Next Steps
+<img width="1515" height="908" alt="image" src="https://github.com/user-attachments/assets/3328b754-d710-4a2b-a94d-da1f8989ce3f" />
 
-1. Add Alembic migrations for the current schema.
-2. Add Supabase RLS policies for `users`, `sessions`, `session_participants`, and `reviews`.
-3. Add frontend form validation and error states.
-4. Add backend and frontend tests.
