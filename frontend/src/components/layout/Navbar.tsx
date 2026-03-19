@@ -18,7 +18,7 @@ export function Navbar() {
             <>
               <NavLink to="/dashboard">Dashboard</NavLink>
               <NavLink to="/profile">Profile</NavLink>
-              <Button className="bg-slate-900 hover:bg-slate-800" onClick={logout}>
+              <Button className="bg-slate-900 hover:bg-slate-800" onClick={() => void logout()}>
                 Logout
               </Button>
             </>

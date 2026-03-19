@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -19,7 +20,7 @@ class SessionRead(SessionCreate):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    tutor_id: int
+    tutor_id: uuid.UUID
     created_at: datetime
 
 

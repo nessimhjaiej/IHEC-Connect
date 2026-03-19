@@ -17,13 +17,16 @@ export function RegisterPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await register.mutateAsync(form);
-    navigate("/dashboard");
+    const user = await register.mutateAsync(form);
+    navigate(user ? "/dashboard" : "/login");
   }
 
   return (
     <div className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <h1 className="text-2xl font-semibold text-slate-900">Create an account</h1>
+      <p className="mt-2 text-sm text-slate-600">
+        If email confirmation is enabled in Supabase, you will be redirected to login after signup.
+      </p>
       <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
         <Input
           label="Full name"

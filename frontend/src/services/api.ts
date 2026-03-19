@@ -1,5 +1,5 @@
 import axios from "axios";
-import { clearAccessToken, getAccessToken } from "../utils/storage";
+import { clearAuthStorage, getAccessToken } from "../utils/storage";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? "http://localhost:8000/api/v1"
@@ -17,7 +17,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      clearAccessToken();
+      clearAuthStorage();
     }
     return Promise.reject(error);
   }

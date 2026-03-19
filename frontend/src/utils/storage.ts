@@ -25,3 +25,8 @@ export function setStoredUser(user: unknown) {
 export function clearStoredUser() {
   localStorage.removeItem(CURRENT_USER_KEY);
 }
+
+export function clearAuthStorage() {
+  clearAccessToken();
+  clearStoredUser();
+}

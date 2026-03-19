@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from enum import Enum
 
@@ -18,7 +19,7 @@ class UserBase(BaseModel):
 class UserRead(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: uuid.UUID
     role: UserRoleRead
     created_at: datetime
 

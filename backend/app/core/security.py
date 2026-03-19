@@ -1,34 +1,36 @@
-from datetime import UTC, datetime, timedelta
+from typing import Any
 
+import httpx
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 
 from app.core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+_jwks_cache: dict[str, Any] | None = None
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+async def get_supabase_jwks() -> dict[str, Any]:
+    global _jwks_cache
+    if _jwks_cache is not None:
+        return _jwks_cache
+
+    jwks_url = f"{settings.supabase_url}/auth/v1/.well-known/jwks.json"
+    async with httpx.AsyncClient(timeout=10) as client:
+        response = await client.get(jwks_url)
+        response.raise_for_status()
+        _jwks_cache = response.json()
+    return _jwks_cache
 
 
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
-
-
-def create_access_token(subject: str) -> str:
-    expire = datetime.now(UTC) + timedelta(minutes=settings.access_token_expire_minutes)
-    payload = {"sub": subject, "exp": expire}
-    return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
-
-
-def decode_access_token(token: str) -> dict:
-    return jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
-
-
-def parse_token_subject(token: str) -> str | None:
+async def decode_supabase_token(token: str) -> dict[str, Any] | None:
     try:
-        payload = decode_access_token(token)
+        jwks = await get_supabase_jwks()
+        payload = jwt.decode(
+            token,
+            jwks,
+            algorithms=["RS256"],
+            audience=settings.supabase_jwt_audience,
+            issuer=f"{settings.supabase_url}/auth/v1",
+        )
     except JWTError:
         return None
-    return payload.get("sub")
+    return payload

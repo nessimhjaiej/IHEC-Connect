@@ -19,9 +19,9 @@ class Settings(BaseSettings):
     database_url: str = (
         "postgresql+asyncpg://postgres:postgres@localhost:5432/ihec_connect"
     )
-    jwt_secret_key: str = "change-me"
-    jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60
+    supabase_url: str = "https://your-project.supabase.co"
+    supabase_anon_key: str = "replace-me"
+    supabase_jwt_audience: str = "authenticated"
 
 
 @lru_cache

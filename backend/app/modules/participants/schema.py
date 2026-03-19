@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
@@ -8,5 +9,5 @@ class SessionParticipantRead(BaseModel):
 
     id: int
     session_id: int
-    user_id: int
+    user_id: uuid.UUID
     joined_at: datetime
