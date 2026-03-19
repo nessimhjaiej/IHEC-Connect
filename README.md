@@ -7,6 +7,22 @@ Production-ready fullstack scaffold for an MVP academic group-session platform.
 - Backend: FastAPI, SQLAlchemy 2.0 async, PostgreSQL, Pydantic, JWT authentication
 - Frontend: React, Vite, TypeScript, Tailwind CSS, React Query, Axios
 
+## Software Architecture
+
+This project follows a modular monolithic architecture, where the backend is deployed as a single application but internally structured into well-defined modules (auth, users, sessions, participants, etc.). Each module respects a clear separation of concerns using a layered approach: routers handle HTTP requests, services encapsulate business logic, and repositories manage data access. This design ensures the codebase remains extensible, maintainable, and easy to understand, while avoiding the operational complexity of microservices. It also provides a solid foundation for future scalability and feature expansion.
+
+## Features
+
+* User authentication (register and login)
+* Profile management (basic academic information)
+* Browse available academic sessions
+* View detailed session information (topic, tutor, schedule)
+* Join group sessions as a participant
+* Create and manage sessions as a tutor
+* Dashboard to track joined and created sessions
+* Basic rating/feedback system for sessions
+
+
 ## Structure
 
 ```text
@@ -79,10 +95,3 @@ cd frontend
 npm install
 npm run dev
 ```
-
-## Recommended next steps
-
-1. Add Alembic migrations and `.env` files for environment-specific configuration.
-2. Replace placeholder JWT secret values and connect `database_url` to Supabase Postgres.
-3. Add form validation, toast/error handling, and richer dashboard filtering.
-4. Add test suites for services, repositories, and critical frontend flows.
