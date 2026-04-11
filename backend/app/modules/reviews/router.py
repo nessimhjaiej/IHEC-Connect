@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,7 +19,7 @@ def get_review_service(session: AsyncSession = Depends(get_db_session)) -> Revie
 
 @router.get("/user/{reviewee_id}", response_model=list[ReviewRead])
 async def list_reviews_for_user(
-    reviewee_id: int,
+    reviewee_id: uuid.UUID,
     service: ReviewService = Depends(get_review_service),
 ) -> list[ReviewRead]:
     return await service.list_reviews_for_user(reviewee_id)

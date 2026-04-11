@@ -28,7 +28,9 @@ export async function register(payload: RegisterPayload) {
     options: {
       data: {
         full_name: payload.full_name,
-        role: payload.role
+        role: payload.role,
+        major: payload.major,
+        academic_year: payload.academic_year
       }
     }
   });

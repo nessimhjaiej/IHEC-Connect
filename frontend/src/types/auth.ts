@@ -7,5 +7,7 @@ export interface RegisterPayload {
   full_name: string;
   email: string;
   password: string;
-  role: "student" | "tutor";
+  role: "student" | "tutor" | "alumni";
+  major?: string;
+  academic_year?: string;
 }

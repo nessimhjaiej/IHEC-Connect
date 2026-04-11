@@ -1,0 +1,12 @@
+{
+  "name": "ihec-connect",
+  "private": true,
+  "scripts": {
+    "promptfoo": "promptfoo",
+    "promptfoo:eval": "promptfoo eval",
+    "promptfoo:view": "promptfoo view"
+  },
+  "devDependencies": {
+    "promptfoo": "^0.121.2"
+  }
+}

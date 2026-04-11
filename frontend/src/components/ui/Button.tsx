@@ -7,7 +7,7 @@ export function Button({ children, className, ...props }: ButtonProps) {
   return (
     <button
       className={cn(
-        "rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70",
+        "inline-flex items-center justify-center rounded-full bg-[var(--text)] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(20,33,61,0.15)] transition hover:-translate-y-0.5 hover:bg-[var(--brand)] disabled:cursor-not-allowed disabled:opacity-70",
         className
       )}
       {...props}

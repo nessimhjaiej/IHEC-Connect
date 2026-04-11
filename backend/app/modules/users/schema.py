@@ -8,12 +8,18 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field
 class UserRoleRead(str, Enum):
     student = "student"
     tutor = "tutor"
+    alumni = "alumni"
+    admin = "admin"
+    professor = "professor"
 
 
 class UserBase(BaseModel):
     full_name: str = Field(min_length=2, max_length=120)
     email: EmailStr
     bio: str | None = Field(default=None, max_length=500)
+    major: str | None = Field(default=None, max_length=120)
+    academic_year: str | None = Field(default=None, max_length=50)
+    avatar_url: str | None = Field(default=None, max_length=500)
 
 
 class UserRead(UserBase):
@@ -27,3 +33,6 @@ class UserRead(UserBase):
 class UserUpdate(BaseModel):
     full_name: str | None = Field(default=None, min_length=2, max_length=120)
     bio: str | None = Field(default=None, max_length=500)
+    major: str | None = Field(default=None, max_length=120)
+    academic_year: str | None = Field(default=None, max_length=50)
+    avatar_url: str | None = Field(default=None, max_length=500)

@@ -12,6 +12,9 @@ from app.core.database import Base
 class UserRole(str, enum.Enum):
     student = "student"
     tutor = "tutor"
+    alumni = "alumni"
+    admin = "admin"
+    professor = "professor"
 
 
 class User(Base):
@@ -21,6 +24,9 @@ class User(Base):
     full_name: Mapped[str] = mapped_column(String(120), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     bio: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    major: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    academic_year: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    avatar_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db_session
-from app.core.dependencies import require_role
+from app.core.dependencies import require_roles
 from app.modules.sessions.repository import SessionRepository
 from app.modules.sessions.schema import SessionCreate, SessionDetail, SessionRead
 from app.modules.sessions.service import SessionService
@@ -35,6 +35,6 @@ async def get_session(
 async def create_session(
     payload: SessionCreate,
     service: SessionService = Depends(get_session_service),
-    current_user: User = Depends(require_role(UserRole.tutor)),
+    current_user: User = Depends(require_roles(UserRole.tutor, UserRole.alumni)),
 ) -> SessionRead:
     return await service.create_session(current_user, payload)

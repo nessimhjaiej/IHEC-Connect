@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+backend/.env
+frontend/.env
 
 # Python
 __pycache__/
@@ -38,4 +40,3 @@ coverage/
 Thumbs.db
 .idea/
 .vscode/
-

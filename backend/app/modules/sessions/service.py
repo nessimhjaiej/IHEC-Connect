@@ -1,10 +1,10 @@
 from fastapi import HTTPException, status
 
-from app.modules.sessions.model import Session
+from app.modules.sessions.model import PricingType, Session, SessionType
 from app.modules.sessions.repository import SessionRepository
 from app.modules.sessions.schema import SessionCreate, SessionDetail, SessionRead
 from app.modules.subjects.repository import SubjectRepository
-from app.modules.users.model import User
+from app.modules.users.model import User, UserRole
 
 
 class SessionService:
@@ -45,9 +45,25 @@ class SessionService:
         )
 
     async def create_session(self, current_user: User, payload: SessionCreate) -> SessionRead:
-        subject = await self.subject_repository.get_by_id(payload.subject_id)
-        if subject is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subject not found.")
+        if current_user.role == UserRole.tutor and payload.session_type != SessionType.tutoring.value:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Tutors can only create tutoring sessions.",
+            )
+
+        if current_user.role == UserRole.alumni and payload.session_type != SessionType.entrepreneurship.value:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Alumni can only create entrepreneurship sessions.",
+            )
+
+        if payload.subject_id is not None:
+            subject = await self.subject_repository.get_by_id(payload.subject_id)
+            if subject is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subject not found.")
+
+        if payload.pricing_type == PricingType.free.value:
+            payload = payload.model_copy(update={"price_dt": None})
 
         session_obj = Session(**payload.model_dump(), tutor_id=current_user.id)
         created = await self.repository.create(session_obj)

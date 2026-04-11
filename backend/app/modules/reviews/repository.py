@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,7 +10,7 @@ class ReviewRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def list_by_reviewee(self, reviewee_id: int) -> list[Review]:
+    async def list_by_reviewee(self, reviewee_id: uuid.UUID) -> list[Review]:
         result = await self.session.execute(
             select(Review).where(Review.reviewee_id == reviewee_id).order_by(Review.created_at.desc())
         )

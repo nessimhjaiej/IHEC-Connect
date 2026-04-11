@@ -7,24 +7,47 @@ interface SessionCardProps {
 
 export function SessionCard({ session }: SessionCardProps) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
-        <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-          {session.subject.name}
+    <article className="group overflow-hidden rounded-[30px] border border-[var(--line)] bg-[var(--panel)] p-6 shadow-[0_20px_60px_rgba(20,33,61,0.08)] backdrop-blur">
+      <div className="mb-5 flex items-center justify-between">
+        <span className="rounded-full bg-[var(--brand-soft)] px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-deep)]">
+          {session.subject?.name ?? "Entrepreneurship"}
         </span>
-        <span className="text-sm text-slate-500">{session.participant_count} joined</span>
+        <span className="text-sm font-semibold text-[var(--muted)]">
+          {session.participant_count} joined
+        </span>
       </div>
-      <h3 className="text-lg font-semibold text-slate-900">{session.title}</h3>
-      <p className="mt-2 text-sm text-slate-600">{session.description ?? "No description yet."}</p>
-      <div className="mt-4 space-y-1 text-sm text-slate-500">
-        <p>Tutor: {session.tutor.full_name}</p>
-        <p>Starts: {new Date(session.scheduled_at).toLocaleString()}</p>
+      <div className="rounded-[24px] bg-gradient-to-br from-[var(--text)] to-[var(--accent)] p-5 text-white">
+        <h3 className="text-xl font-bold leading-tight">{session.title}</h3>
+        <p className="mt-3 line-clamp-3 text-sm text-white/72">
+          {session.description ?? "No description yet."}
+        </p>
+      </div>
+      <div className="mt-5 grid gap-3 text-sm text-[var(--muted)]">
+        <div className="flex items-center justify-between border-b border-[var(--line)] pb-3">
+          <span>{session.session_type === "tutoring" ? "Tutor" : "Host"}</span>
+          <span className="font-semibold text-[var(--text)]">{session.tutor.full_name}</span>
+        </div>
+        <div className="flex items-center justify-between border-b border-[var(--line)] pb-3">
+          <span>Starts</span>
+          <span className="font-semibold text-[var(--text)]">
+            {new Date(session.scheduled_at).toLocaleDateString()}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>{session.pricing_type === "paid" ? "Price" : "Capacity"}</span>
+          <span className="font-semibold text-[var(--text)]">
+            {session.pricing_type === "paid" && session.price_dt != null
+              ? `${session.price_dt} DT`
+              : `${session.capacity} seats`}
+          </span>
+        </div>
       </div>
       <Link
         to={`/sessions/${session.id}`}
-        className="mt-4 inline-flex text-sm font-semibold text-brand-700"
+        className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[var(--brand-deep)] transition group-hover:translate-x-1"
       >
-        View details
+        View academic session
+        <span aria-hidden="true">→</span>
       </Link>
     </article>
   );

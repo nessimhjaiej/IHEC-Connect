@@ -1,3 +1,5 @@
+import uuid
+
 from app.modules.reviews.model import Review
 from app.modules.reviews.repository import ReviewRepository
 from app.modules.reviews.schema import ReviewCreate, ReviewRead
@@ -13,6 +15,6 @@ class ReviewService:
         created = await self.repository.create(review)
         return ReviewRead.model_validate(created)
 
-    async def list_reviews_for_user(self, reviewee_id: int) -> list[ReviewRead]:
+    async def list_reviews_for_user(self, reviewee_id: uuid.UUID) -> list[ReviewRead]:
         reviews = await self.repository.list_by_reviewee(reviewee_id)
         return [ReviewRead.model_validate(item) for item in reviews]

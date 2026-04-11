@@ -17,27 +17,36 @@ export function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 className="text-2xl font-semibold text-slate-900">Login</h1>
-      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-        <Input
-          label="Email"
-          type="email"
-          value={form.email}
-          onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-        />
-        <Input
-          label="Password"
-          type="password"
-          value={form.password}
-          onChange={(event) =>
-            setForm((current) => ({ ...current, password: event.target.value }))
-          }
-        />
-        <Button className="w-full" disabled={login.isPending} type="submit">
-          {login.isPending ? "Signing in..." : "Sign in"}
-        </Button>
-      </form>
-    </div>
+    <section className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.9fr,1.1fr]">
+      <div className="rounded-[36px] bg-[var(--text)] p-8 text-white shadow-[0_24px_80px_rgba(20,33,61,0.16)]">
+        <p className="text-sm font-bold uppercase tracking-[0.2em] text-white/55">Access your workspace</p>
+        <h1 className="mt-4 font-['Space_Grotesk'] text-4xl font-bold">Pick up where your study flow left off.</h1>
+        <p className="mt-4 text-white/72">
+          Sign in to browse sessions, join active groups, and manage your academic profile.
+        </p>
+      </div>
+      <div className="rounded-[36px] border border-[var(--line)] bg-[var(--panel)] p-8 shadow-[0_24px_80px_rgba(20,33,61,0.08)]">
+        <h2 className="font-['Space_Grotesk'] text-3xl font-bold text-[var(--text)]">Login</h2>
+        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+          <Input
+            label="Email"
+            type="email"
+            value={form.email}
+            onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+          />
+          <Input
+            label="Password"
+            type="password"
+            value={form.password}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, password: event.target.value }))
+            }
+          />
+          <Button className="w-full bg-[var(--brand)] hover:bg-[var(--brand-deep)]" disabled={login.isPending} type="submit">
+            {login.isPending ? "Signing in..." : "Sign in"}
+          </Button>
+        </form>
+      </div>
+    </section>
   );
 }

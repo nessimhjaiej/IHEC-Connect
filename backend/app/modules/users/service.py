@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi import HTTPException, status
 
 from app.modules.users.model import User
@@ -9,7 +11,7 @@ class UserService:
     def __init__(self, repository: UserRepository) -> None:
         self.repository = repository
 
-    async def get_profile(self, user_id: int) -> UserRead:
+    async def get_profile(self, user_id: uuid.UUID | str) -> UserRead:
         user = await self.repository.get_by_id(user_id)
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")

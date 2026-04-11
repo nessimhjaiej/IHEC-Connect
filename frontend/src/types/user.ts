@@ -1,8 +1,11 @@
 export interface User {
-  id: number;
+  id: string;
   full_name: string;
   email: string;
   bio?: string | null;
-  role: "student" | "tutor";
+  major?: string | null;
+  academic_year?: string | null;
+  avatar_url?: string | null;
+  role: "student" | "tutor" | "alumni" | "admin" | "professor";
   created_at: string;
 }

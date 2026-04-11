@@ -7,11 +7,11 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export function Input({ label, className, ...props }: InputProps) {
   return (
-    <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+    <label className="flex flex-col gap-2 text-sm font-medium text-[var(--muted)]">
       <span>{label}</span>
       <input
         className={cn(
-          "rounded-lg border border-slate-200 bg-white px-3 py-2 outline-none ring-brand-200 transition focus:ring-4",
+          "rounded-2xl border border-[var(--line)] bg-white/90 px-4 py-3 text-[var(--text)] outline-none transition focus:border-[var(--brand)] focus:ring-4 focus:ring-orange-100",
           className
         )}
         {...props}
