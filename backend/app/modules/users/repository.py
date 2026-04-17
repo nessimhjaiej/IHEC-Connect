@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.modules.users.model import User, UserRole
+from app.modules.users.model import User
 from app.modules.users.schema import UserAdminUpdate, UserUpdate
 
 
@@ -18,16 +18,25 @@ class UserRepository:
         result = await self.session.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
 
-    async def list_users(self, role: UserRole | None = None) -> list[User]:
+    async def list_users(
+        self,
+        can_tutor: bool | None = None,
+        is_alumni: bool | None = None,
+        is_admin: bool | None = None,
+    ) -> list[User]:
         query = select(User).order_by(User.created_at.desc())
-        if role:
-            query = query.where(User.role == role)
+        if can_tutor is not None:
+            query = query.where(User.can_tutor == can_tutor)
+        if is_alumni is not None:
+            query = query.where(User.is_alumni == is_alumni)
+        if is_admin is not None:
+            query = query.where(User.is_admin == is_admin)
         result = await self.session.execute(query)
         return list(result.scalars().all())
 
     async def list_tutors(self) -> list[User]:
         result = await self.session.execute(
-            select(User).where(User.role == UserRole.tutor, User.is_active == True)
+            select(User).where(User.is_verified_tutor == True, User.is_active == True)
         )
         return list(result.scalars().all())
 
@@ -71,7 +80,10 @@ class UserRepository:
             existing.academic_year_id = user.academic_year_id
         if user.avatar_url is not None:
             existing.avatar_url = user.avatar_url
-        existing.role = user.role
+        existing.can_tutor = user.can_tutor
+        existing.is_verified_tutor = user.is_verified_tutor
+        existing.is_alumni = user.is_alumni
+        existing.is_admin = user.is_admin
         existing.is_active = user.is_active
         await self.session.commit()
         await self.session.refresh(existing)

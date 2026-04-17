@@ -6,8 +6,9 @@ from app.core.dependencies import get_current_user
 from app.modules.auth.repository import AuthRepository
 from app.modules.auth.schema import RegisterProfileRequest, SessionResponse
 from app.modules.auth.service import AuthService
-from app.modules.users.model import User, UserRole
+from app.modules.users.model import User
 from app.modules.users.repository import UserRepository
+from app.modules.users.schema import UserRead
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -28,11 +29,14 @@ async def register_profile(
         email=payload.email,
         major_id=payload.major_id,
         academic_year_id=payload.academic_year_id,
-        role=UserRole(payload.role),
+        can_tutor=False,
+        is_verified_tutor=False,
+        is_alumni=False,
+        is_admin=False,
         is_active=True,
     )
     saved = await UserRepository(session).upsert(user)
-    return SessionResponse(user=saved)
+    return SessionResponse(user=UserRead.model_validate(saved))
 
 
 @router.get("/session", response_model=SessionResponse)

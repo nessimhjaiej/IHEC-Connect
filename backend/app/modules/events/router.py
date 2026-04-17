@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db_session
-from app.core.dependencies import get_current_user, get_optional_user, require_role
+from app.core.dependencies import get_current_user, get_optional_user
 from app.modules.events.repository import EventRepository
 from app.modules.events.schema import EventCreate, EventParticipantRead, EventRead, EventUpdate
 from app.modules.events.service import EventService
-from app.modules.users.model import User, UserRole
+from app.modules.users.model import User
 
 router = APIRouter(prefix="/events", tags=["events"])
 
@@ -33,7 +33,7 @@ async def get_event(
 @router.post("", response_model=EventRead, status_code=201)
 async def create_event(
     payload: EventCreate,
-    current_user: User = Depends(require_role(UserRole.admin)),
+    current_user: User = Depends(get_current_user),
     service: EventService = Depends(get_event_service),
 ) -> EventRead:
     return await service.create_event(current_user, payload)
@@ -43,7 +43,7 @@ async def create_event(
 async def update_event(
     event_id: int,
     payload: EventUpdate,
-    current_user: User = Depends(require_role(UserRole.admin)),
+    current_user: User = Depends(get_current_user),
     service: EventService = Depends(get_event_service),
 ) -> EventRead:
     return await service.update_event(event_id, current_user, payload)
@@ -52,7 +52,7 @@ async def update_event(
 @router.delete("/{event_id}", status_code=204)
 async def delete_event(
     event_id: int,
-    current_user: User = Depends(require_role(UserRole.admin)),
+    current_user: User = Depends(get_current_user),
     service: EventService = Depends(get_event_service),
 ) -> None:
     await service.delete_event(event_id, current_user)

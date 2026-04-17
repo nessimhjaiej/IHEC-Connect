@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 
-from app.modules.events.model import Event, EventParticipant
+from app.modules.events.model import Event, EventParticipant, EventType
 from app.modules.events.repository import EventRepository
 from app.modules.events.schema import EventCreate, EventParticipantRead, EventRead, EventUpdate
 from app.modules.users.model import User
@@ -9,6 +9,23 @@ from app.modules.users.model import User
 class EventService:
     def __init__(self, repository: EventRepository) -> None:
         self.repository = repository
+
+    @staticmethod
+    def _assert_can_host_event(current_user: User, event_type: EventType) -> None:
+        if current_user.is_admin:
+            return
+
+        # Capability checks live here so route/repository layers stay stable while
+        # the policy evolves.
+        if event_type == EventType.academic and current_user.can_tutor:
+            return
+        if event_type == EventType.entrepreneurial and current_user.is_alumni:
+            return
+
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to host this event type.",
+        )
 
     async def _to_read(self, event: Event) -> EventRead:
         count = await self.repository.get_registration_count(event.id)
@@ -44,6 +61,7 @@ class EventService:
         return await self._to_read(event)
 
     async def create_event(self, current_user: User, payload: EventCreate) -> EventRead:
+        self._assert_can_host_event(current_user, payload.type)
         event = Event(**payload.model_dump(), host_user_id=current_user.id)
         created = await self.repository.create_event(event)
         return await self._to_read(created)
@@ -52,6 +70,11 @@ class EventService:
         event = await self.repository.get_by_id(event_id)
         if event is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found.")
+        if not current_user.is_admin and event.host_user_id != current_user.id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You cannot update this event.")
+
+        next_type = payload.type or event.type
+        self._assert_can_host_event(current_user, next_type)
         updated = await self.repository.update_event(event, payload)
         return await self._to_read(updated)
 
@@ -59,6 +82,8 @@ class EventService:
         event = await self.repository.get_by_id(event_id)
         if event is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found.")
+        if not current_user.is_admin and event.host_user_id != current_user.id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You cannot delete this event.")
         await self.repository.delete_event(event)
 
     async def register_to_event(self, event_id: int, current_user: User) -> EventParticipantRead:

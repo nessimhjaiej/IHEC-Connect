@@ -39,25 +39,43 @@ async def get_current_user(
     return await _get_user_from_token(token, session)
 
 
-def require_role(role: UserRole):
-    async def role_dependency(current_user: User = Depends(get_current_user)) -> User:
-        if current_user.role != role:
+def require_profile_flag(flag_name: str):
+    async def flag_dependency(current_user: User = Depends(get_current_user)) -> User:
+        if not getattr(current_user, flag_name, False):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="You do not have permission to perform this action.",
             )
         return current_user
-    return role_dependency
+    return flag_dependency
+
+
+require_admin = require_profile_flag("is_admin")
+require_tutor_capability = require_profile_flag("can_tutor")
+require_alumni_capability = require_profile_flag("is_alumni")
+
+
+def require_role(role: UserRole):
+    mapping = {
+        UserRole.admin: "is_admin",
+        UserRole.tutor: "can_tutor",
+        UserRole.student: None,
+    }
+    flag_name = mapping[role]
+    if flag_name is None:
+        return get_current_user
+    return require_profile_flag(flag_name)
 
 
 def require_roles(*roles: UserRole):
     async def roles_dependency(current_user: User = Depends(get_current_user)) -> User:
-        if current_user.role not in roles:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="You do not have permission to perform this action.",
-            )
-        return current_user
+        if any(current_user.role == role for role in roles):
+            return current_user
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to perform this action.",
+        )
+
     return roles_dependency
 
 

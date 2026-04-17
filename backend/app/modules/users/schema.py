@@ -1,14 +1,7 @@
 import uuid
 from datetime import datetime
-from enum import Enum
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
-
-
-class UserRoleRead(str, Enum):
-    student = "student"
-    tutor = "tutor"
-    admin = "admin"
 
 
 class UserBase(BaseModel):
@@ -23,7 +16,10 @@ class UserBase(BaseModel):
 class UserRead(UserBase):
     model_config = ConfigDict(from_attributes=True)
     id: uuid.UUID
-    role: UserRoleRead
+    can_tutor: bool
+    is_verified_tutor: bool
+    is_alumni: bool
+    is_admin: bool
     is_active: bool
     created_at: datetime
 
@@ -38,4 +34,7 @@ class UserUpdate(BaseModel):
 
 class UserAdminUpdate(BaseModel):
     is_active: bool | None = None
-    role: UserRoleRead | None = None
+    can_tutor: bool | None = None
+    is_verified_tutor: bool | None = None
+    is_alumni: bool | None = None
+    is_admin: bool | None = None

@@ -1,7 +1,7 @@
 import uuid
 from fastapi import HTTPException, status
 
-from app.modules.users.model import User, UserRole
+from app.modules.users.model import User
 from app.modules.users.repository import UserRepository
 from app.modules.users.schema import UserAdminUpdate, UserRead, UserUpdate
 
@@ -16,8 +16,17 @@ class UserService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
         return UserRead.model_validate(user)
 
-    async def list_users(self, role: UserRole | None = None) -> list[UserRead]:
-        users = await self.repository.list_users(role=role)
+    async def list_users(
+        self,
+        can_tutor: bool | None = None,
+        is_alumni: bool | None = None,
+        is_admin: bool | None = None,
+    ) -> list[UserRead]:
+        users = await self.repository.list_users(
+            can_tutor=can_tutor,
+            is_alumni=is_alumni,
+            is_admin=is_admin,
+        )
         return [UserRead.model_validate(u) for u in users]
 
     async def list_tutors(self) -> list[UserRead]:

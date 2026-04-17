@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db_session
-from app.core.dependencies import get_current_user, require_role
-from app.modules.users.model import User, UserRole
+from app.core.dependencies import get_current_user, require_admin
+from app.modules.users.model import User
 from app.modules.users.repository import UserRepository
 from app.modules.users.schema import UserAdminUpdate, UserRead, UserUpdate
 from app.modules.users.service import UserService
@@ -32,10 +32,16 @@ async def update_current_user(
 
 @router.get("", response_model=list[UserRead])
 async def list_users(
-    role: UserRole | None = Query(default=None),
+    can_tutor: bool | None = Query(default=None),
+    is_alumni: bool | None = Query(default=None),
+    is_admin: bool | None = Query(default=None),
     service: UserService = Depends(get_user_service),
 ) -> list[UserRead]:
-    return await service.list_users(role=role)
+    return await service.list_users(
+        can_tutor=can_tutor,
+        is_alumni=is_alumni,
+        is_admin=is_admin,
+    )
 
 
 @router.get("/tutors", response_model=list[UserRead])
@@ -57,6 +63,6 @@ async def admin_update_user(
     user_id: uuid.UUID,
     payload: UserAdminUpdate,
     service: UserService = Depends(get_user_service),
-    _: User = Depends(require_role(UserRole.admin)),
+    _: User = Depends(require_admin),
 ) -> UserRead:
     return await service.admin_update_user(user_id, payload)

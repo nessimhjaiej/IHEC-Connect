@@ -11,6 +11,8 @@ from app.modules.reviews.router import router as reviews_router
 from app.modules.documents.router import router as documents_router
 from app.modules.events.router import router as events_router
 from app.modules.opportunities.router import router as opportunities_router
+from app.modules.recordings.router import router as recordings_router
+from app.modules.tutor_applications.router import router as tutor_applications_router
 
 
 
@@ -26,3 +28,5 @@ api_router.include_router(reviews_router)
 api_router.include_router(documents_router)
 api_router.include_router(events_router)
 api_router.include_router(opportunities_router)
+api_router.include_router(tutor_applications_router)
+api_router.include_router(recordings_router)

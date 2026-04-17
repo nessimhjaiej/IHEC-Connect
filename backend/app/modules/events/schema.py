@@ -2,15 +2,17 @@ import uuid
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.modules.events.model import DeliveryMode, EventType
+
 
 class EventCreate(BaseModel):
-    type: str = Field(default="workshop", max_length=50)
+    type: EventType = EventType.academic
     title: str = Field(min_length=3, max_length=200)
     description: str | None = None
     subject_id: int | None = None
     major_id: int | None = None
     academic_year_id: int | None = None
-    delivery_mode: str = Field(default="onsite", max_length=20)
+    delivery_mode: DeliveryMode = DeliveryMode.onsite
     location_text: str | None = Field(default=None, max_length=300)
     meeting_url: str | None = Field(default=None, max_length=500)
     starts_at: datetime
@@ -19,13 +21,13 @@ class EventCreate(BaseModel):
 
 
 class EventUpdate(BaseModel):
-    type: str | None = None
+    type: EventType | None = None
     title: str | None = Field(default=None, min_length=3, max_length=200)
     description: str | None = None
     subject_id: int | None = None
     major_id: int | None = None
     academic_year_id: int | None = None
-    delivery_mode: str | None = None
+    delivery_mode: DeliveryMode | None = None
     location_text: str | None = None
     meeting_url: str | None = None
     starts_at: datetime | None = None
@@ -36,14 +38,14 @@ class EventUpdate(BaseModel):
 class EventRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    type: str
+    type: EventType
     title: str
     description: str | None
     host_user_id: uuid.UUID
     subject_id: int | None
     major_id: int | None
     academic_year_id: int | None
-    delivery_mode: str
+    delivery_mode: DeliveryMode
     location_text: str | None
     meeting_url: str | None
     starts_at: datetime

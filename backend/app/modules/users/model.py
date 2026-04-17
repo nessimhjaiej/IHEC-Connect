@@ -2,7 +2,7 @@ import enum
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, String, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -27,7 +27,12 @@ class User(Base):
         ForeignKey("academic_years.id"), nullable=True, index=True
     )
     avatar_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)
+    can_tutor: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    is_verified_tutor: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
+    is_alumni: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -42,5 +47,24 @@ class User(Base):
     documents = relationship("Document", back_populates="uploader")
     event_participations = relationship("EventParticipant", back_populates="user")
     hosted_events = relationship("Event", back_populates="host_user")
+    tutor_applications = relationship(
+        "TutorApplication",
+        foreign_keys="TutorApplication.user_id",
+        back_populates="user",
+    )
+    reviewed_tutor_applications = relationship(
+        "TutorApplication",
+        foreign_keys="TutorApplication.professor_id",
+        back_populates="professor",
+    )
+    uploaded_recordings = relationship("Recording", back_populates="uploader")
     major = relationship("Major", back_populates="profiles")
     academic_year = relationship("AcademicYear", back_populates="profiles")
+
+    @property
+    def role(self) -> UserRole:
+        if self.is_admin:
+            return UserRole.admin
+        if self.can_tutor:
+            return UserRole.tutor
+        return UserRole.student
