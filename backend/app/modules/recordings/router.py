@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db_session
 from app.core.dependencies import get_current_user, require_admin
+from app.modules.events.repository import EventRepository
 from app.modules.recordings.repository import RecordingRepository
 from app.modules.recordings.schema import RecordingCreate, RecordingRead, RecordingValidationUpdate
 from app.modules.recordings.service import RecordingService
@@ -14,15 +15,16 @@ router = APIRouter(prefix="/recordings", tags=["recordings"])
 def get_recording_service(
     session: AsyncSession = Depends(get_db_session),
 ) -> RecordingService:
-    return RecordingService(RecordingRepository(session))
+    return RecordingService(RecordingRepository(session), EventRepository(session))
 
 
 @router.get("/event/{event_id}", response_model=list[RecordingRead])
 async def list_recordings_for_event(
     event_id: int,
+    current_user: User = Depends(get_current_user),
     service: RecordingService = Depends(get_recording_service),
 ) -> list[RecordingRead]:
-    return await service.list_for_event(event_id)
+    return await service.list_for_event(event_id, current_user)
 
 
 @router.post("", response_model=RecordingRead, status_code=201)

@@ -10,7 +10,9 @@ class UserService:
     def __init__(self, repository: UserRepository) -> None:
         self.repository = repository
 
-    async def get_profile(self, user_id: uuid.UUID | str) -> UserRead:
+    async def get_profile(self, user_id: uuid.UUID | str, current_user: User) -> UserRead:
+        if not current_user.is_admin and str(current_user.id) != str(user_id):
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User profile access denied.")
         user = await self.repository.get_by_id(user_id)
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
@@ -18,12 +20,12 @@ class UserService:
 
     async def list_users(
         self,
-        can_tutor: bool | None = None,
+        is_tutor: bool | None = None,
         is_alumni: bool | None = None,
         is_admin: bool | None = None,
     ) -> list[UserRead]:
         users = await self.repository.list_users(
-            can_tutor=can_tutor,
+            is_tutor=is_tutor,
             is_alumni=is_alumni,
             is_admin=is_admin,
         )

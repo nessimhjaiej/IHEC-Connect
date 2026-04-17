@@ -6,7 +6,7 @@ from app.core.dependencies import get_current_user
 from app.modules.auth.repository import AuthRepository
 from app.modules.auth.schema import RegisterProfileRequest, SessionResponse
 from app.modules.auth.service import AuthService
-from app.modules.users.model import User
+from app.modules.users.model import StudentProfile, User
 from app.modules.users.repository import UserRepository
 from app.modules.users.schema import UserRead
 
@@ -27,13 +27,14 @@ async def register_profile(
         id=payload.id,
         full_name=payload.full_name,
         email=payload.email,
-        major_id=payload.major_id,
-        academic_year_id=payload.academic_year_id,
-        can_tutor=False,
-        is_verified_tutor=False,
-        is_alumni=False,
-        is_admin=False,
         is_active=True,
+        student_profile=StudentProfile(
+            id=payload.id,
+            major_id=payload.major_id,
+            academic_year_id=payload.academic_year_id,
+            is_tutor=False,
+            is_alumni=False,
+        ),
     )
     saved = await UserRepository(session).upsert(user)
     return SessionResponse(user=UserRead.model_validate(saved))

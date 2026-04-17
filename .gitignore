@@ -15,3 +15,7 @@ frontend/.env
 .DS_Store
 *.log
 node_modules
+
+frontend/.DS_Store
+frontend/*.log
+frontend/.venv/

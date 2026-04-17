@@ -11,13 +11,22 @@ class EventService:
         self.repository = repository
 
     @staticmethod
+    def _assert_can_view_events(current_user: User) -> None:
+        if current_user.is_admin or current_user.student_profile is not None:
+            return
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to view events.",
+        )
+
+    @staticmethod
     def _assert_can_host_event(current_user: User, event_type: EventType) -> None:
         if current_user.is_admin:
             return
 
         # Capability checks live here so route/repository layers stay stable while
         # the policy evolves.
-        if event_type == EventType.academic and current_user.can_tutor:
+        if event_type == EventType.academic and current_user.is_tutor:
             return
         if event_type == EventType.entrepreneurial and current_user.is_alumni:
             return
@@ -49,12 +58,13 @@ class EventService:
         }
         return EventRead.model_validate(data)
 
-    async def list_events(self, current_user: User | None = None) -> list[EventRead]:
-        _ = current_user
+    async def list_events(self, current_user: User) -> list[EventRead]:
+        self._assert_can_view_events(current_user)
         events = await self.repository.list_events()
         return [await self._to_read(e) for e in events]
 
-    async def get_event(self, event_id: int) -> EventRead:
+    async def get_event(self, event_id: int, current_user: User) -> EventRead:
+        self._assert_can_view_events(current_user)
         event = await self.repository.get_by_id(event_id)
         if event is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found.")

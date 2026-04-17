@@ -11,6 +11,6 @@ class Major(Base):
     code: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
 
-    profiles = relationship("User", back_populates="major")
+    students = relationship("StudentProfile", back_populates="major")
     subjects = relationship("Subject", back_populates="major")
     events = relationship("Event", back_populates="major")

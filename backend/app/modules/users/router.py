@@ -32,13 +32,14 @@ async def update_current_user(
 
 @router.get("", response_model=list[UserRead])
 async def list_users(
-    can_tutor: bool | None = Query(default=None),
+    is_tutor: bool | None = Query(default=None),
     is_alumni: bool | None = Query(default=None),
     is_admin: bool | None = Query(default=None),
+    _: User = Depends(require_admin),
     service: UserService = Depends(get_user_service),
 ) -> list[UserRead]:
     return await service.list_users(
-        can_tutor=can_tutor,
+        is_tutor=is_tutor,
         is_alumni=is_alumni,
         is_admin=is_admin,
     )
@@ -52,9 +53,10 @@ async def list_tutors(service: UserService = Depends(get_user_service)) -> list[
 @router.get("/{user_id}", response_model=UserRead)
 async def get_user(
     user_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
     service: UserService = Depends(get_user_service),
 ) -> UserRead:
-    return await service.get_profile(user_id)
+    return await service.get_profile(user_id, current_user)
 
 
 # Admin: activate/deactivate user

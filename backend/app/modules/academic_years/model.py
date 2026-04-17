@@ -11,6 +11,6 @@ class AcademicYear(Base):
     label: Mapped[str] = mapped_column(String(50), nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
-    profiles = relationship("User", back_populates="academic_year")
+    students = relationship("StudentProfile", back_populates="academic_year")
     subjects = relationship("Subject", back_populates="academic_year")
     events = relationship("Event", back_populates="academic_year")

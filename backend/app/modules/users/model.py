@@ -22,17 +22,7 @@ class User(Base):
     full_name: Mapped[str] = mapped_column(String(120), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     bio: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    major_id: Mapped[int | None] = mapped_column(ForeignKey("majors.id"), nullable=True, index=True)
-    academic_year_id: Mapped[int | None] = mapped_column(
-        ForeignKey("academic_years.id"), nullable=True, index=True
-    )
     avatar_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    can_tutor: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
-    is_verified_tutor: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=False, server_default="false"
-    )
-    is_alumni: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
-    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -40,6 +30,18 @@ class User(Base):
     )
 
     # Relationships
+    student_profile = relationship(
+        "StudentProfile",
+        uselist=False,
+        back_populates="profile",
+        cascade="all, delete-orphan",
+    )
+    admin_profile = relationship(
+        "AdminProfile",
+        uselist=False,
+        back_populates="profile",
+        cascade="all, delete-orphan",
+    )
     sessions = relationship("Session", back_populates="tutor")
     joined_sessions = relationship("SessionParticipant", back_populates="user")
     reviews_received = relationship("Review", foreign_keys="Review.reviewee_id", back_populates="reviewee")
@@ -58,13 +60,68 @@ class User(Base):
         back_populates="professor",
     )
     uploaded_recordings = relationship("Recording", back_populates="uploader")
-    major = relationship("Major", back_populates="profiles")
-    academic_year = relationship("AcademicYear", back_populates="profiles")
+
+    @property
+    def major_id(self) -> int | None:
+        return self.student_profile.major_id if self.student_profile else None
+
+    @property
+    def academic_year_id(self) -> int | None:
+        return self.student_profile.academic_year_id if self.student_profile else None
+
+    @property
+    def is_tutor(self) -> bool:
+        return bool(self.student_profile and self.student_profile.is_tutor)
+
+    @property
+    def can_tutor(self) -> bool:
+        return self.is_tutor
+
+    @property
+    def is_alumni(self) -> bool:
+        return bool(self.student_profile and self.student_profile.is_alumni)
+
+    @property
+    def is_admin(self) -> bool:
+        return self.admin_profile is not None
 
     @property
     def role(self) -> UserRole:
         if self.is_admin:
             return UserRole.admin
-        if self.can_tutor:
+        if self.is_tutor:
             return UserRole.tutor
         return UserRole.student
+
+
+class StudentProfile(Base):
+    __tablename__ = "students"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True
+    )
+    major_id: Mapped[int | None] = mapped_column(ForeignKey("majors.id"), nullable=True, index=True)
+    academic_year_id: Mapped[int | None] = mapped_column(
+        ForeignKey("academic_years.id"), nullable=True, index=True
+    )
+    is_tutor: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    is_alumni: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    profile = relationship("User", back_populates="student_profile")
+    major = relationship("Major", back_populates="students")
+    academic_year = relationship("AcademicYear", back_populates="students")
+
+
+class AdminProfile(Base):
+    __tablename__ = "admins"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    profile = relationship("User", back_populates="admin_profile")

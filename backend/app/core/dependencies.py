@@ -51,14 +51,14 @@ def require_profile_flag(flag_name: str):
 
 
 require_admin = require_profile_flag("is_admin")
-require_tutor_capability = require_profile_flag("can_tutor")
+require_tutor_capability = require_profile_flag("is_tutor")
 require_alumni_capability = require_profile_flag("is_alumni")
 
 
 def require_role(role: UserRole):
     mapping = {
         UserRole.admin: "is_admin",
-        UserRole.tutor: "can_tutor",
+        UserRole.tutor: "is_tutor",
         UserRole.student: None,
     }
     flag_name = mapping[role]

@@ -15,6 +15,11 @@ class TutorApplicationService:
         self.repository = repository
 
     async def list_my_applications(self, current_user: User) -> list[TutorApplicationRead]:
+        if current_user.student_profile is None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Only students can access tutor applications.",
+            )
         applications = await self.repository.list_for_user(current_user.id)
         return [TutorApplicationRead.model_validate(application) for application in applications]
 
@@ -23,6 +28,11 @@ class TutorApplicationService:
         current_user: User,
         payload: TutorApplicationCreate,
     ) -> TutorApplicationRead:
+        if current_user.student_profile is None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Only students can create tutor applications.",
+            )
         application = TutorApplication(
             user_id=current_user.id,
             subject_id=payload.subject_id,
@@ -45,10 +55,12 @@ class TutorApplicationService:
 
         # Approval stays the single unlock path for verified tutoring.
         if payload.status == TutorApplicationStatus.approved:
-            application.user.can_tutor = True
-            application.user.is_verified_tutor = True
-        elif payload.status == TutorApplicationStatus.rejected:
-            application.user.is_verified_tutor = False
+            if application.user.student_profile is None:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Tutor applications can only be approved for student profiles.",
+                )
+            application.user.student_profile.is_tutor = True
 
         updated = await self.repository.save(application)
         return TutorApplicationRead.model_validate(updated)

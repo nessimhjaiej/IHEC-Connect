@@ -1,6 +1,6 @@
 from app.modules.academic_years.model import AcademicYear
 from app.modules.majors.model import Major
-from app.modules.users.model import User
+from app.modules.users.model import AdminProfile, StudentProfile, User
 from app.modules.subjects.model import Subject
 from app.modules.sessions.model import Session
 from app.modules.participants.model import SessionParticipant
@@ -15,6 +15,8 @@ __all__ = [
     "AcademicYear",
     "Major",
     "User",
+    "StudentProfile",
+    "AdminProfile",
     "Subject",
     "Session",
     "SessionParticipant",
