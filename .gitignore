@@ -18,4 +18,4 @@ node_modules
 
 frontend/.DS_Store
 frontend/*.log
-frontend/.venv/
+frontend\.venv
