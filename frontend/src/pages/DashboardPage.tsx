@@ -47,18 +47,24 @@ export function DashboardPage() {
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           {isTutor && (
-            <Button className="bg-white text-blue-700 hover:bg-blue-50 text-sm flex items-center gap-1.5">
+            <Button className="bg-white text-[#5f56d8] hover:bg-[#f1efff] text-sm flex items-center gap-1.5">
               <Link to="/sessions/new" className="flex items-center gap-1.5"><Plus className="h-4 w-4" /> Créer une séance</Link>
             </Button>
           )}
           {isAdmin && (
             <>
-              <Button className="bg-white text-blue-700 hover:bg-blue-50 text-sm">
-                <Link to="/admin/events">Gérer les événements</Link>
-              </Button>
-              <Button className="bg-white text-blue-700 hover:bg-blue-50 text-sm">
-                <Link to="/admin/users">Gérer les utilisateurs</Link>
-              </Button>
+              <Link
+                to="/admin#events"
+                className="inline-flex items-center rounded-xl bg-[#ecebff] px-4 py-2 text-sm font-semibold text-[#5f56d8] shadow-[0_10px_24px_rgba(95,86,216,0.18)] transition hover:bg-[#e5e2ff]"
+              >
+                Gérer les événements
+              </Link>
+              <Link
+                to="/admin#users"
+                className="inline-flex items-center rounded-xl bg-[#ecebff] px-4 py-2 text-sm font-semibold text-[#5f56d8] shadow-[0_10px_24px_rgba(95,86,216,0.18)] transition hover:bg-[#e5e2ff]"
+              >
+                Gérer les utilisateurs
+              </Link>
             </>
           )}
         </div>
@@ -107,7 +113,7 @@ export function DashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-slate-900">Événements à venir</h2>
-            <Link to="/events" className="text-sm text-blue-600 hover:underline">Voir tout →</Link>
+            <Link to="/events" className="text-sm text-[#5f56d8] hover:underline">Voir tout →</Link>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
             {upcomingEvents.map((event) => (

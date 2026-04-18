@@ -33,14 +33,14 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 className="text-2xl font-semibold text-slate-900">Your profile</h1>
+    <div className="mx-auto max-w-2xl rounded-[30px] border border-[#ebe9ff] bg-white p-6 shadow-[0_14px_35px_rgba(15,23,42,0.08)]">
+      <h1 className="text-2xl font-semibold text-[#5b52cb]">Your profile</h1>
       <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
         <Input label="Full name" value={fullName} onChange={(event) => setFullName(event.target.value)} />
         <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
           <span>Filiere (Major)</span>
           <select
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2"
+            className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5"
             value={majorId}
             onChange={(event) => setMajorId(event.target.value ? Number(event.target.value) : "")}
           >
@@ -55,7 +55,7 @@ export function ProfilePage() {
         <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
           <span>Annee academique</span>
           <select
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2"
+            className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5"
             value={academicYearId}
             onChange={(event) => setAcademicYearId(event.target.value ? Number(event.target.value) : "")}
           >

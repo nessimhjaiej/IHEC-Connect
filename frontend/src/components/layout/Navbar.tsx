@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { useCurrentUser, useLogout } from "../../hooks/useAuth";
 import { Button } from "../ui/Button";
-import { GraduationCap, LayoutDashboard, LogOut, Calendar, Briefcase, FileText, User } from "lucide-react";
+import { GraduationCap, LayoutDashboard, LogOut, Calendar, Briefcase, FileText, User, ShieldCheck } from "lucide-react";
 
 
 export function Navbar() {
@@ -34,8 +34,14 @@ export function Navbar() {
         <div className="flex items-center gap-3 text-sm">
           {user ? (
             <>
+              {user.role === "admin" && (
+                <NavLink to="/admin" className={({ isActive }) => `hidden md:flex items-center gap-1 ${isActive ? "text-blue-700 font-semibold" : "text-slate-600 hover:text-blue-700"}`}>
+                  <ShieldCheck className="h-4 w-4" />
+                  Admin
+                </NavLink>
+              )}
               <NavLink to="/dashboard" className={({ isActive }) => `hidden md:flex items-center gap-1 ${isActive ? "text-blue-700 font-semibold" : "text-slate-600 hover:text-blue-700"}`}>
-                Dashboard
+                Accueil
               </NavLink>
               <NavLink to="/profile" className={({ isActive }) => `flex items-center gap-1 ${isActive ? "text-blue-700 font-semibold" : "text-slate-600 hover:text-blue-700"}`}>
                 <User className="h-4 w-4" />

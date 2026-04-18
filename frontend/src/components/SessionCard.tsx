@@ -9,9 +9,9 @@ export function SessionCard({ session }: SessionCardProps) {
   const spotsLeft = session.capacity - session.participant_count;
 
   return (
-    <article className={`rounded-2xl border bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3 ${session.is_cancelled ? "border-red-200 opacity-70" : "border-slate-200"}`}>
+    <article className={`rounded-[26px] border bg-gradient-to-r p-5 shadow-[0_14px_34px_rgba(17,24,39,0.06)] transition-shadow hover:shadow-[0_16px_38px_rgba(17,24,39,0.1)] flex flex-col gap-3 ${session.is_cancelled ? "border-red-200 from-rose-50 to-white opacity-80" : "border-[#ebe9ff] from-[#f4f3ff] to-white"}`}>
       <div className="flex items-start justify-between gap-2">
-        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+        <span className="rounded-full bg-[#ecebff] px-3 py-1 text-xs font-semibold text-[#6b63e8]">
           {session.subject.name}
         </span>
         <div className="flex items-center gap-1">
@@ -22,7 +22,7 @@ export function SessionCard({ session }: SessionCardProps) {
             </span>
           )}
           {session.meet_link && (
-            <span className="flex items-center gap-0.5 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+            <span className="flex items-center gap-0.5 text-xs text-[#5f56d8] bg-[#ecebff] px-2 py-0.5 rounded-full">
               <Video className="h-3 w-3" /> Meet
             </span>
           )}
@@ -59,7 +59,7 @@ export function SessionCard({ session }: SessionCardProps) {
 
       <Link
         to={`/sessions/${session.id}`}
-        className="mt-auto inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 transition-colors"
+        className="mt-auto inline-flex items-center justify-center rounded-2xl bg-[#5f56d8] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#5249c9]"
       >
         Voir les détails
       </Link>

@@ -27,7 +27,7 @@ export function EventsPage() {
 
   if (isLoading) return (
     <div className="flex items-center justify-center py-20">
-      <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      <Loader2 className="h-8 w-8 animate-spin text-[#5f56d8]" />
     </div>
   );
 
@@ -55,7 +55,7 @@ export function EventsPage() {
             onClick={() => setFilter(type)}
             className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors capitalize ${
               filter === type
-                ? "bg-blue-600 text-white"
+                ? "bg-[#5f56d8] text-white"
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >

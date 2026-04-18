@@ -13,6 +13,7 @@ import { CreateSessionPage } from "./pages/CreateSessionPage";
 import { DocumentsPage } from "./pages/DocumentsPage";
 import { EventsPage } from "./pages/EventsPage";
 import { OpportunitiesPage } from "./pages/OpportunitiesPage";
+import { AdminPage } from "./pages/AdminPage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
       
         {/* Protected */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminPage /></ProtectedRoute>} />
         <Route path="/sessions/new" element={<ProtectedRoute><CreateSessionPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       

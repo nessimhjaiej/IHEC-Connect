@@ -43,7 +43,7 @@ export function DocumentsPage() {
 
   if (isLoading) return (
     <div className="flex items-center justify-center py-20">
-      <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      <Loader2 className="h-8 w-8 animate-spin text-[#5f56d8]" />
     </div>
   );
 
@@ -64,7 +64,7 @@ export function DocumentsPage() {
 
       {/* Upload form */}
       {showForm && (
-        <form onSubmit={handleUpload} className="rounded-2xl border border-blue-100 bg-blue-50 p-5 space-y-4">
+        <form onSubmit={handleUpload} className="rounded-[26px] border border-[#e8e5ff] bg-[#f4f3ff] p-5 space-y-4">
           <h2 className="font-semibold text-slate-900">Déposer un document</h2>
           <Input
             label="Titre du document"
@@ -95,7 +95,7 @@ export function DocumentsPage() {
           <article key={doc.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm flex flex-col gap-3 hover:shadow-md transition-shadow">
             <div className="flex items-start gap-3">
               <div className="rounded-xl bg-blue-50 p-2.5">
-                <FileText className="h-5 w-5 text-blue-600" />
+                <FileText className="h-5 w-5 text-[#5f56d8]" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm text-slate-900 truncate">{doc.title}</h3>
@@ -114,7 +114,7 @@ export function DocumentsPage() {
             <div className="flex gap-2 mt-auto">
               <a
                 href={getDocumentDownloadUrl(doc.id)}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#5f56d8] px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#5249c9]"
                 download
               >
                 <Download className="h-3.5 w-3.5" /> Télécharger

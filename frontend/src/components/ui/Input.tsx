@@ -11,7 +11,7 @@ export function Input({ label, className, ...props }: InputProps) {
       <span>{label}</span>
       <input
         className={cn(
-          "rounded-lg border border-slate-200 bg-white px-3 py-2 outline-none ring-brand-200 transition focus:ring-4",
+          "rounded-2xl border border-slate-200 bg-white px-4 py-2.5 outline-none transition focus:border-[#5f56d8] focus:ring-4 focus:ring-[#e7e4ff]",
           className
         )}
         {...props}

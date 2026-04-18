@@ -10,6 +10,38 @@ export interface User {
   role: "student" | "tutor" | "admin";
   is_active: boolean;
   created_at: string;
+  // Tutor-specific fields
+  tutor_status?: "unverified" | "verified" | null;
+  tutor_verification_status?: "pending" | "approved" | "rejected" | null;
+  professor_verified?: boolean | null;
+  grades_submitted_at?: string | null;
+}
+
+// ── Tutor Verification ─────────────────────────────────────
+export interface TutorApplication {
+  id: number;
+  tutor_id: string;
+  tutor: User;
+  status: "pending" | "approved" | "rejected";
+  submitted_grades_url?: string | null;
+  grades_file_name?: string | null;
+  submitted_at: string;
+  reviewed_at?: string | null;
+  reviewed_by?: string | null;
+  rejection_reason?: string | null;
+  created_at: string;
+}
+
+export interface TutorVerificationRequest {
+  id: number;
+  tutor_id: string;
+  tutor: User;
+  professor_id?: string | null;
+  status: "pending" | "approved" | "rejected";
+  message?: string | null;
+  submitted_at: string;
+  reviewed_at?: string | null;
+  created_at: string;
 }
 
 export interface Major {

@@ -4,6 +4,7 @@ import { useSessions } from "../hooks/useSessions";
 import { Button } from "../components/ui/Button";
 import { GraduationCap, BookOpen, Calendar, Briefcase, FileText, Star } from "lucide-react";
 import { PlatformCalendar } from "../components/PlatformCalendar";
+import ihecCampusImage from "../../image/494027740_1349030946899691_6234677823881717959_n.jpg";
 
 const features = [
   { icon: BookOpen, title: "Séances de tutorat", desc: "Trouvez et réservez des séances avec des tuteurs qualifiés de l'IHEC.", color: "bg-blue-50 text-blue-600" },
@@ -37,13 +38,13 @@ export function LandingPage() {
       {/* Hero */}
       <section className="grid gap-10 md:grid-cols-[1.4fr,1fr] md:items-center pt-8">
         <div className="space-y-6">
-          <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#ecebff] px-4 py-2 text-sm font-semibold text-[#5f56d8]">
             <GraduationCap className="h-4 w-4" />
             Plateforme académique & entrepreneuriale — IHEC Carthage
           </span>
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl leading-tight">
             Connectez-vous,<br />
-            <span className="text-blue-600">Apprenez, Progressez.</span>
+            <span className="text-[#5f56d8]">Apprenez, Progressez.</span>
           </h1>
           <p className="max-w-xl text-lg text-slate-600 leading-relaxed">
             IHEC Connect relie les étudiants et tuteurs de l'IHEC Carthage sur une seule plateforme : tutorat, événements, opportunités professionnelles et ressources pédagogiques.
@@ -60,18 +61,15 @@ export function LandingPage() {
             </Link>
           </div>
         </div>
-
-        <div className="rounded-3xl bg-gradient-to-br from-blue-700 to-blue-900 p-8 text-white shadow-xl">
-          <h2 className="text-xl font-semibold">IHEC Connect v1.0</h2>
-          <div className="mt-4 space-y-3 text-sm text-blue-100">
-            <p className="flex items-start gap-2">✅ Authentification sécurisée (Supabase)</p>
-            <p className="flex items-start gap-2">✅ Réservation de séances de tutorat</p>
-            <p className="flex items-start gap-2">✅ Partage de documents pédagogiques</p>
-            <p className="flex items-start gap-2">✅ Système d'évaluation des tuteurs</p>
-            <p className="flex items-start gap-2">✅ Calendrier des événements</p>
-            <p className="flex items-start gap-2">✅ Offres de stages & emplois</p>
-          </div>
+        <div className="overflow-hidden rounded-3xl border border-white/70 bg-white/70 p-2 shadow-[0_24px_60px_rgba(15,23,42,0.14)] backdrop-blur">
+          <img
+            src={ihecCampusImage}
+            alt="Campus IHEC Carthage"
+            className="h-[320px] w-full rounded-[22px] object-cover md:h-[420px]"
+            loading="lazy"
+          />
         </div>
+
       </section>
 
       <section className="space-y-5">

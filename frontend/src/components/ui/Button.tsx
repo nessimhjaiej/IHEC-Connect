@@ -7,7 +7,7 @@ export function Button({ children, className, ...props }: ButtonProps) {
   return (
     <button
       className={cn(
-        "rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70",
+        "rounded-xl bg-[#5f56d8] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(95,86,216,0.25)] transition hover:bg-[#564ec8] disabled:cursor-not-allowed disabled:opacity-70",
         className
       )}
       {...props}

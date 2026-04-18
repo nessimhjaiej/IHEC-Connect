@@ -1,11 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color: #0f172a;
-  background: linear-gradient(180deg, #f8fafc 0%, #eef6ff 100%);
-  font-family: "Segoe UI", sans-serif;
+  background: radial-gradient(circle at 10% 5%, #d8c7ff 0%, #efe7ff 45%, #f7f3ff 100%);
+  font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
 body {
