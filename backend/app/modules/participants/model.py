@@ -1,0 +1,40 @@
+<<<<<<< HEAD
+from sqlalchemy import Column, Integer, ForeignKey, DateTime
+from sqlalchemy.sql import func
+from app.core.database import Base
+
+
+class Participant(Base):
+    __tablename__ = "participants"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
+    joined_at = Column(DateTime(timezone=True), server_default=func.now())
+=======
+import uuid
+from datetime import datetime
+
+from sqlalchemy import DateTime, ForeignKey, UniqueConstraint, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.core.database import Base
+
+
+class SessionParticipant(Base):
+    __tablename__ = "session_participants"
+    __table_args__ = (UniqueConstraint("session_id", "user_id", name="uq_session_user"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    session_id: Mapped[int] = mapped_column(ForeignKey("sessions.id"), nullable=False, index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("profiles.id"),
+        nullable=False,
+        index=True,
+    )
+    joined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    session = relationship("Session", back_populates="participants")
+    user = relationship("User", back_populates="joined_sessions")
+>>>>>>> b315ad8349eafde528c9209e3b7ff6d217909d43

@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-main: #f0eff4;
+  --bg-card: #ffffff;
+  --bg-sidebar: #2d2b55;
+  --bg-sidebar-hover: #3d3a6e;
+  --bg-sidebar-active: #4a4790;
+  --accent-purple: #7c6fcd;
+  --accent-blue: #6b9bd2;
+  --accent-green: #7ec8a4;
+  --accent-rose: #e8a0a0;
+  --accent-peach: #f0b8a0;
+  --text-primary: #2d2b55;
+  --text-secondary: #6e6d8a;
+  --text-muted: #a8a7c0;
+  --text-sidebar: #c8c7e0;
+  --text-sidebar-active: #ffffff;
+  --border-color: #e4e3f0;
+  --shadow-sm: 0 2px 8px rgba(45, 43, 85, 0.06);
+  --shadow-md: 0 4px 16px rgba(45, 43, 85, 0.10);
+  --shadow-lg: 0 8px 32px rgba(45, 43, 85, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Nunito', sans-serif;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--accent-purple);
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+/* Course card hover lift */
+.course-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Sidebar active indicator */
+.nav-link {
+  position: relative;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 3px;
+  background: var(--accent-purple);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Notification badge */
+.badge {
+  animation: pulse-badge 2s infinite;
+}
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Page transitions */
+.page-enter {
+  animation: fadeSlideIn 0.3s ease forwards;
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
